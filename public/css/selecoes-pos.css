@@ -1,0 +1,33 @@
+.card-header {
+    /* .25 é equivalente a py-1 */
+    /* .5 é equivalente a py-2 */
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    font-size: 1.25em;
+}
+
+.card-ajuda {
+    background-color: lightblue;
+}
+
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form-group.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.text-required {
+    color: red;
+    font-weight: normal;
+    vertical-align: middle;
+}
+
+.va-middle {
+    vertical-align: middle;
+}
