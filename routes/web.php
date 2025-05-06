@@ -31,9 +31,6 @@ Route::resource('setores', SetorController::class);
 
 // TIPOS DE ARQUIVO
 Route::resource('tiposarquivo', TipoArquivoController::class);
-Route::post('tiposarquivo/create', [TipoArquivoController::class, 'store']);
-Route::get('tiposarquivo/edit/{tipoarquivo}', [TipoArquivoController::class, 'edit']);
-Route::put('tiposarquivo/edit/{tipoarquivo}', [TipoArquivoController::class, 'update']);
 
 // USERS
 Route::get('search/partenome', [UserController::class, 'partenome']);

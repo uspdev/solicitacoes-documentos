@@ -210,19 +210,18 @@ class SolicitacaoDocumentoController extends Controller
     public function monta_compact_index()
     {
         $data = self::$data;
-        $objetos = SolicitacaoDocumento::listarSolicitacoesDocumentos();
+        $solicitacoesdocumentos = SolicitacaoDocumento::listarSolicitacoesDocumentos();
         $max_upload_size = config('solicitacoes-documentos.upload_max_filesize');
 
-        return compact('data', 'objetos', 'max_upload_size');
+        return compact('data', 'solicitacoesdocumentos', 'max_upload_size');
     }
 
     public function monta_compact(SolicitacaoDocumento $solicitacaodocumento, string $modo, ?string $scroll = null)
     {
         $data = (object) self::$data;
-        $objeto = $solicitacaodocumento;
-        $objeto->tiposarquivo = TipoArquivo::obterTiposArquivoDoSetor('SolicitacaoDocumento', null, $objeto->setor);
+        $solicitacaodocumento->tiposarquivo = TipoArquivo::obterTiposArquivoDoSetor('SolicitacaoDocumento', null, $solicitacaodocumento->setor);
         $max_upload_size = config('solicitacoes-documentos.upload_max_filesize');
 
-        return compact('data', 'objeto', 'modo', 'max_upload_size', 'scroll');
+        return compact('data', 'solicitacaodocumento', 'modo', 'max_upload_size', 'scroll');
     }
 }

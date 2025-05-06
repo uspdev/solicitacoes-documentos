@@ -16,7 +16,7 @@ class TipoArquivo extends Model
     protected $table = 'tiposarquivo';
 
     protected $fillable = [
-        'classe_nome',
+        'setor_id',
         'nome',
         'obrigatorio',
         'minimo',
@@ -25,6 +25,13 @@ class TipoArquivo extends Model
 
     // uso no crud generico
     protected const fields = [
+        [
+            'name' => 'setor_id',
+            'label' => 'Para',
+            'type' => 'select',
+            'model' => 'Setor',
+            'data' => [],
+        ],
         [
             'name' => 'nome',
             'label' => 'Nome',
@@ -69,14 +76,14 @@ class TipoArquivo extends Model
      */
     public static function listarTiposArquivo()
     {
-        return self::query();
+        return self::with('setor')->get()->sortBy('setor.sigla');
     }
 
     /**
-     * relacionamento com setores
+     * Relacionamento: tipo de documento pertence a setor
      */
-    public function setores()
+    public function setor()
     {
-        return $this->belongsToMany('App\Models\Setor', 'setor_tipoarquivo', 'tipoarquivo_id', 'setor_id')->withTimestamps();
+        return $this->belongsTo('App\Models\Setor');
     }
 }

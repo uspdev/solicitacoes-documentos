@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  @if (isset($objetos) && ($objetos->count() > 0))
+  @if (isset($solicitacoesdocumentos) && ($solicitacoesdocumentos->count() > 0))
     <table class="table table-striped tabela-solicitacoesdocumentos display responsive" style="width:100%">
       <thead>
         <tr>
@@ -29,7 +29,7 @@
         </tr>
       </thead>
       <tbody>
-        @foreach ($objetos as $solicitacaodocumento)
+        @foreach ($solicitacoesdocumentos as $solicitacaodocumento)
           <tr>
             <td>
               @include('solicitacoesdocumentos.partials.status-small')
@@ -62,7 +62,7 @@
 @stop
 
 @php
-  $paginar = (isset($objetos) && ($objetos->count() > 10));
+  $paginar = (isset($solicitacoesdocumentos) && ($solicitacoesdocumentos->count() > 10));
 @endphp
 
 @section('javascripts_bottom')

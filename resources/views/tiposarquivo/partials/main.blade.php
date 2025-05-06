@@ -3,32 +3,32 @@
     <span class="h4 mt-2">Tipos de Documento</span>
     @can('tiposarquivo.create')
       &nbsp; &nbsp;
-      <a href="{{ route('tiposarquivo.create') }}" class="btn btn-sm btn-success">
+      <button type="button" class="btn btn-sm btn-success" onclick="add_form()">
         <i class="fas fa-plus"></i> Novo
-      </a>
+      </button>
     @endcan
   </div>
 </div>
 
 <table class="table table-sm my-0 ml-3">
   @php
-    $classe_nome_anterior = '';
+    $setor_id_anterior = '';
   @endphp
   @foreach ($tiposarquivo as $tipoarquivo)
-    @if ($tipoarquivo->classe_nome != $classe_nome_anterior)
+    @if ($tipoarquivo->setor_id != $setor_id_anterior)
       <tr>
         <td colspan="2">
-          {{ $tipoarquivo->classe_nome }}
+          {{ $tipoarquivo->setor->sigla }} - {{ $tipoarquivo->setor->nome }}
         </td>
       </tr>
       @php
-        $classe_nome_anterior = $tipoarquivo->classe_nome;
+        $setor_id_anterior = $tipoarquivo->setor_id;
       @endphp
     @endif
     {{-- Mostra o conteúdo de um tipo de arquivo --}}
     <tr>
-      <td>&nbsp;</td>
-      <td>
+      <td nowrap>&nbsp; &nbsp;</td>
+      <td width="100%">
         <div>
           <a name="{{ \Str::lower($tipoarquivo->id) }}" class="font-weight-bold" style="text-decoration: none;">{{ $tipoarquivo->nome }}</a>
           @can('tiposarquivo.update')
@@ -37,9 +37,6 @@
           @can('tiposarquivo.delete')
             @include('tiposarquivo.partials.btn-delete')
           @endcan
-          @if ($tipoarquivo->classe_nome == 'Seleções')
-            @include('tiposarquivo.partials.detalhes')
-          @endif
         </div>
       </td>
     </tr>
