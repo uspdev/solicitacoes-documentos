@@ -202,7 +202,7 @@ class User extends Authenticatable
      */
     public function solicitacoesdocumentos()
     {
-        return $this->belongsToMany('App\Models\SolicitacaoDocumento', 'user_solicitacaodocumento')->withTimestamps();
+        return $this->belongsToMany('App\Models\SolicitacaoDocumento', 'user_solicitacaodocumento', 'user_id', 'solicitacaodocumento_id')->withTimestamps();
     }
 
     /**

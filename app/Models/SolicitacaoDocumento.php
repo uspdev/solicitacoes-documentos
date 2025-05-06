@@ -113,7 +113,7 @@ class SolicitacaoDocumento extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'user_solicitacaodocumento')->withTimestamps();
+        return $this->belongsToMany('App\Models\User', 'user_solicitacaodocumento', 'solicitacaodocumento_id', 'user_id')->withTimestamps();
     }
 
     /**
