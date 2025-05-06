@@ -62,6 +62,12 @@ class AuthServiceProvider extends ServiceProvider
 
         # policies
         Gate::resource('admin', 'App\Policies\AdminPolicy');
+        Gate::resource('setores', 'App\Policies\SetorPolicy');
+        Gate::resource('solicitacoesdocumentos', 'App\Policies\SolicitacaoDocumentoPolicy');
+        Gate::define('solicitacoesdocumentos.viewTheir', 'App\Policies\SolicitacaoDocumentoPolicy@viewTheir');
+        Gate::define('solicitacoesdocumentos.updateStatus', 'App\Policies\SolicitacaoDocumentoPolicy@updateStatus');
+        Gate::define('solicitacoesdocumentos.updateArquivos', 'App\Policies\SolicitacaoDocumentoPolicy@updateArquivos');
+        Gate::resource('tiposarquivo', 'App\Policies\TipoArquivoPolicy');
         Gate::resource('users', 'App\Policies\UserPolicy');
     }
 }

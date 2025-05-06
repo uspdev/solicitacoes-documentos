@@ -17,10 +17,10 @@
         ENV<br>
         <div class="ml-3">
           <div>
-            Inscrições<br>
+            Solicitações de Documentos<br>
             <div class="ml-3">
-              UPLOAD_MAX_FILESIZE: {{ config('inscricoes-selecoes-pos.upload_max_filesize') }} MB<br>
-              Admins: {{ config('inscricoes-selecoes-pos.admins') }}
+              UPLOAD_MAX_FILESIZE: {{ config('solicitacoes-documentos.upload_max_filesize') }} MB<br>
+              Admins: {{ config('solicitacoes-documentos.admins') }}
             </div>
           </div>
           <div>

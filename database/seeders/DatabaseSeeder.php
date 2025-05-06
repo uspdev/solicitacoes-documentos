@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Inscricao;
+use App\Models\SolicitacaoDocumento;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // desativando eventos no seeder
-        Inscricao::flushEventListeners();
+        SolicitacaoDocumento::flushEventListeners();
 
         $this->call([
             PermissionSeeder::class,        // adiciona permissions

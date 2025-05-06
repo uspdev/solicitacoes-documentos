@@ -1,6 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\SetorController;
+use App\Http\Controllers\SolicitacaoDocumentoController;
+use App\Http\Controllers\TipoArquivoController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', [IndexController::class, 'index'])->name('home');
 
@@ -8,6 +15,25 @@ Route::get('/', [IndexController::class, 'index'])->name('home');
 Route::get('login', [LoginController::class, 'redirectToProvider'])->name('login');
 Route::get('callback', [LoginController::class, 'handleProviderCallback']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+// SOLICITAÇÕES DE DOCUMENTOS
+Route::get('solicitacoesdocumentos', [SolicitacaoDocumentoController::class, 'index'])->name('solicitacoesdocumentos.index');
+Route::get('solicitacoesdocumentos/create', [SolicitacaoDocumentoController::class, 'listaSetoresParaSolicitacaoDocumento'])->name('solicitacoesdocumentos.create');
+Route::get('solicitacoesdocumentos/create/{setor}', [SolicitacaoDocumentoController::class, 'create'])->name('solicitacoesdocumentos.create.setor');
+Route::post('solicitacoesdocumentos/create', [SolicitacaoDocumentoController::class, 'store'])->name('solicitacoesdocumentos.store');
+Route::get('solicitacoesdocumentos/edit/{solicitacaodocumentos}', [SolicitacaoDocumentoController::class, 'edit'])->name('solicitacoesdocumentos.edit');
+Route::put('solicitacoesdocumentos/edit/{solicitacaodocumentos}', [SolicitacaoDocumentoController::class, 'update'])->name('solicitacoesdocumentos.update');
+
+// SETORES
+Route::post('setores/{setor}/pessoas', [SetorController::class, 'storePessoa']);
+Route::delete('setores/{setor}/pessoas/{id}', [SetorController::class, 'destroyPessoa']);
+Route::resource('setores', SetorController::class);
+
+// TIPOS DE ARQUIVO
+Route::resource('tiposarquivo', TipoArquivoController::class);
+Route::post('tiposarquivo/create', [TipoArquivoController::class, 'store']);
+Route::get('tiposarquivo/edit/{tipoarquivo}', [TipoArquivoController::class, 'edit']);
+Route::put('tiposarquivo/edit/{tipoarquivo}', [TipoArquivoController::class, 'update']);
 
 // USERS
 Route::get('search/partenome', [UserController::class, 'partenome']);

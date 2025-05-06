@@ -103,7 +103,7 @@ class User extends Authenticatable
     {
         $user = new User;
         $user->codpes = $codpes;
-        if (config('inscricoes-selecoes-pos.usar_replicado')) {
+        if (config('solicitacoes-documentos.usar_replicado')) {
 
             //caso utilize o replicado, porém a pessoa não apareça, insere um usuário fake e atualiza o mesmo com dados da senha única no login
             $user->email = (Pessoa::email($codpes)) ?: $codpes . '@usuarios.usp.br';
@@ -152,7 +152,7 @@ class User extends Authenticatable
     /**
      * Troca o perfil do usuário
      *
-     * @param String $perfil [usuario, docente, gerente ou admin]
+     * @param String $perfil [usuario, gerente ou admin]
      * @return Array [success=>[true||false], msg=>mensagem de sucesso]
      */
     public function trocarPerfil($perfil)
@@ -166,14 +166,6 @@ class User extends Authenticatable
                 session(['perfil' => 'usuario']);
                 $ret['success'] = true;
                 $ret['msg'] = 'Perfil mudado para Usuário com sucesso.';
-                break;
-
-            case 'docente':
-                if (Gate::allows('docente')) {
-                    session(['perfil' => 'docente']);
-                    $ret['success'] = true;
-                    $ret['msg'] = 'Perfil mudado para Docente com sucesso.';
-                }
                 break;
 
             case 'gerente':
@@ -205,97 +197,12 @@ class User extends Authenticatable
         return self::where('email', $email)->exists();
     }
 
-    public function associarProgramaFuncao(?string $programa, string $funcao)
-    {
-        if (is_null($programa))
-            $this->programas()->newPivotStatement()->insert([    // insere manualmente registro na tabela relacional... não funciona fazer attach de usuário para um programa inexistente
-                'user_id' => $this->id,
-                'programa_id' => null,
-                'funcao' => $funcao,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        else
-            $this->programas()->attach(Programa::where('nome', $programa)->first()->id, ['funcao' => $funcao]);
-    }
-
-    public function desassociarProgramaFuncao(?string $programa, string $funcao)
-    {
-        // remove manualmente registro na tabela relacional... não funciona fazer detach de usuário para um programa inexistente, nem detach em que se especifica o pivot
-        DB::table('user_programa')
-            ->where('user_id', $this->id)
-            ->where('programa_id', is_null($programa) ? null : Programa::where('nome', $programa)->first()->id)
-            ->where('funcao', $funcao)
-            ->delete();
-    }
-
-    public function listarProgramasGerenciados()
-    {
-        if ((session('perfil') == 'admin') ||
-            (DB::table('user_programa')    // não dá pra partir de $this->, pelo fato de programa_id ser null na tabela relacional
-                 ->where('user_id', $this->id)
-                 ->where(function ($query) {
-                     $query->where('funcao', 'Serviço de Pós-Graduação')
-                         ->orWhere('funcao', 'Coordenadores da Pós-Graduação');
-                 })->exists()))
-            return Programa::all();
-        else
-            return $this->programas;
-    }
-
-    public function listarProgramasGerenciadosFuncao(string $funcao)
-    {
-        if ((session('perfil') == 'admin') ||
-            (DB::table('user_programa')    // não dá pra partir de $this->, pelo fato de programa_id ser null na tabela relacional
-                 ->where('user_id', $this->id)
-                 ->where(function ($query) use ($funcao) {
-                     $query->where('funcao', $funcao);
-                 })->exists()))
-            return Programa::whereHas('users', function ($query) use ($funcao) {
-                $query->where('user_programa.funcao', $funcao);
-            })->get();
-        else
-            return $this->programas()->where('funcao', $funcao)->get();
-    }
-
-    public function gerenciaPrograma(?int $programa_id = null)
-    {
-        if ($this->programas()->where('programa_id', $programa_id)->exists())
-            return true;
-
-        return DB::table('user_programa')    // não dá pra partir de $this->, pelo fato de programa_id ser null na tabela relacional
-                   ->where('user_id', $this->id)
-                   ->where(function ($query) {
-                       $query->where('funcao', 'Serviço de Pós-Graduação')
-                           ->orWhere('funcao', 'Coordenadores da Pós-Graduação');
-                   })->exists();
-    }
-
-    public function gerenciaProgramaFuncao(string $funcao, ?int $programa_id = null)
-    {
-        if (in_array($funcao, ['Serviço de Pós-Graduação', 'Coordenadores da Pós-Graduação']))
-            return DB::table('user_programa')    // não dá pra partir de $this->, pelo fato de programa_id ser null na tabela relacional
-                       ->where('user_id', $this->id)
-                       ->where('funcao', $funcao)
-                       ->exists();
-
-        return $this->programas()->where('programa_id', $programa_id)->where('funcao', $funcao)->exists();
-    }
-
     /**
-     * Relacionamento n:n com inscrição:
+     * Relacionamento n:n com solicitações de documentos:
      */
-    public function solicitacoesisencaotaxa()
+    public function solicitacoesdocumentos()
     {
-        return $this->belongsToMany('App\Models\SolicitacaoIsencaoTaxa', 'user_solicitacaoisencaotaxa', 'user_id', 'solicitacaoisencaotaxa_id')->withTimestamps();    // se eu não especificar o nome do campo como solicitacaoisencaotaxa_id, o Laravel vai pensar que é solicitacao_isencao_taxa_id, e vai dar erro
-    }
-
-    /**
-     * Relacionamento n:n com inscrição:
-     */
-    public function inscricoes()
-    {
-        return $this->belongsToMany('App\Models\Inscricao', 'user_inscricao')->withTimestamps();
+        return $this->belongsToMany('App\Models\SolicitacaoDocumento', 'user_solicitacaodocumento')->withTimestamps();
     }
 
     /**
@@ -305,15 +212,6 @@ class User extends Authenticatable
     public function setores()
     {
         return $this->belongsToMany('App\Models\Setor', 'user_setor')->withPivot('funcao')->withTimestamps();
-    }
-
-    /**
-     * Relacionamento n:n com programa, atributo funcao:
-     *  - Secretario, Coordenador do Programa, Coordenador da Pos-Graduacao
-     */
-    public function programas()
-    {
-        return $this->belongsToMany('App\Models\Programa', 'user_programa')->withPivot('funcao')->withTimestamps();
     }
 
     // este método é invocado pelo senhaunica-socialite, por isso é preciso que ele exista aqui
