@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,        // adiciona permissions
             SetorReplicadoSeeder::class,    // adiciona todos os setores da unidade do replicado
-
+            SetorSeeder::class,             // configura e-mails dos setores
         ]);
     }
 }

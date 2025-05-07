@@ -106,6 +106,6 @@ class SolicitacaoDocumentoPolicy
         elseif (Gate::allows('perfilgerente'))
             return ;
         elseif (Gate::allows('perfilusuario'))
-            return ($solicitacaodocumento->pessoas('Autor')->id == $user->id);
+            return false;
     }
 }

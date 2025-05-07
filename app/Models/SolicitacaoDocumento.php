@@ -56,8 +56,8 @@ class SolicitacaoDocumento extends Model
     public static function estados()
     {
         return [
-            'Pendente',        // decorre de ações do usuário
-            'Providenciado'    // decorre de ações do gerente
+            'Pendente',    // decorre de ações do usuário
+            'Atendida'     // decorre de ações do gerente
         ];
     }
 

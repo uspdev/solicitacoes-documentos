@@ -16,8 +16,8 @@
     <button type="submit" class="btn btn-sm {{ ($solicitacaodocumento->estado == 'Pendente') ? 'btn-warning' : 'btn-secondary' }}" disabled name="estado" value="Pendente">
       Pendente
     </button>
-    <button type="submit" class="btn btn-sm {{ ($solicitacaodocumento->estado == 'Providenciado') ? 'btn-success' : 'btn-secondary' }}" disabled name="estado" value="Providenciado">
-      Providenciado
+    <button type="submit" class="btn btn-sm {{ ($solicitacaodocumento->estado == 'Atendida') ? 'btn-success' : 'btn-secondary' }}" disabled name="estado" value="Atendida">
+      Atendida
     </button>
   </div>
 {{ html()->form()->close() }}

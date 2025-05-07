@@ -20,7 +20,12 @@
   <a id="card_arquivos" name="card_arquivos"></a>
   <div class="card bg-light mb-3 w-100" id="card-arquivos">
     <div class="card-header form-inline">
-      Documentos
+      Documento(s)
+      @if (Gate::allows('solicitacoesdocumentos.updateArquivos', $objeto))
+        <label for="input_arquivo">
+          <span class="btn btn-sm btn-light text-primary ml-2"> <i class="fas fa-plus"></i> Adicionar</span>
+        </label>
+      @endif
       <span data-toggle="tooltip" data-html="true" title="Tamanho máximo de cada arquivo: {{ $max_upload_size }}KB ">
         <i class="fas fa-question-circle text-secondary ml-2"></i>
       </span>
@@ -33,12 +38,6 @@
         $tipoarquivo = $solicitacaodocumento->tipoarquivo;
       @endphp
       <div class="arquivos-lista">
-        {{ $tipoarquivo['nome'] }}
-        @if (Gate::allows('solicitacoesdocumentos.updateArquivos', $objeto))
-          <label for="input_arquivo">
-            <span class="btn btn-sm btn-light text-primary ml-2"> <i class="fas fa-plus"></i> Adicionar</span>
-          </label>
-        @endif
         <input type="hidden" name="tipoarquivo" id="tipoarquivo" value="{{ $tipoarquivo['nome'] }}">
         <input type="file" name="arquivo[]" id="input_arquivo" accept="image/jpeg,image/png,application/pdf" class="d-none" multiple capture="environment">
 
