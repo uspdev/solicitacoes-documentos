@@ -62,6 +62,9 @@ class AuthServiceProvider extends ServiceProvider
 
         # policies
         Gate::resource('admin', 'App\Policies\AdminPolicy');
+        Gate::resource('arquivos', 'App\Policies\ArquivoPolicy');
+        Gate::define('limpezadados.showForm', 'App\Policies\LimpezaDadosPolicy@showForm');
+        Gate::define('limpezadados.run', 'App\Policies\LimpezaDadosPolicy@run');
         Gate::resource('setores', 'App\Policies\SetorPolicy');
         Gate::resource('solicitacoesdocumentos', 'App\Policies\SolicitacaoDocumentoPolicy');
         Gate::define('solicitacoesdocumentos.viewTheir', 'App\Policies\SolicitacaoDocumentoPolicy@viewTheir');

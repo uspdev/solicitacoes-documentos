@@ -105,9 +105,12 @@ class TipoArquivoController extends Controller
         $this->authorize('tiposarquivo.delete');
 
         $tipoarquivo = TipoArquivo::find((int) $id);
-        $tipoarquivo->delete();
-
-        $request->session()->flash('alert-success', 'Dados removidos com sucesso!');
+        if ($tipoarquivo->arquivos()->exists())
+            $request->session()->flash('alert-danger', 'Há arquivos armazenados deste tipo!');
+        else {
+            $tipoarquivo->delete();
+            $request->session()->flash('alert-success', 'Dados removidos com sucesso!');
+        }
         \UspTheme::activeUrl('tiposarquivo');
         return view('tiposarquivo.tree', $this->monta_compact_index());
     }

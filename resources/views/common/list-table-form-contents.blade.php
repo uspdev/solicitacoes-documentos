@@ -1,4 +1,4 @@
-@foreach ($data->model::getFields() as $col)
+@foreach ($data->model::getFields($setor_id ?? null) as $col)
   @if (empty($col['type']))
     @include('common.list-table-form-text')
   @elseif ($col['type'] == 'password')

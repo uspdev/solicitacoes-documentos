@@ -2,9 +2,8 @@ $(document).ready(function() {
 
   $('[data-toggle="tooltip"]').tooltip();
 
-  $('input[id^="input_arquivo_"]').change(function() {
-    var i_tipoarquivo = $(this).attr('id').split('_')[2];
-    submete_form('arquivos', 'post', i_tipoarquivo);
+  $('input[id="input_arquivo"]').change(function() {
+    submete_form('arquivos', 'post');
   });
 });
 
@@ -25,8 +24,7 @@ function alterar_arquivo(arquivo_id) {
   submete_form('arquivos/' + arquivo_id, 'patch');
 }
 
-function submete_form(acao, metodo, i_tipoarquivo) {
-  $('#tipoarquivo').val($('#tipoarquivo_' + i_tipoarquivo).val());
+function submete_form(acao, metodo) {
   $('#modal_processando').modal('show');
   $('#form_arquivos').attr({ action: acao });
   $('<input>').attr({ type: 'hidden', name: '_method', value: metodo }).appendTo('#form_arquivos');

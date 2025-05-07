@@ -17,6 +17,7 @@ class SolicitacaoDocumento extends Model
 
     protected $fillable = [
         'setor_id',
+        'tipoarquivo_id',
     ];
 
     // uso no crud generico
@@ -28,16 +29,23 @@ class SolicitacaoDocumento extends Model
             'model' => 'Setor',
             'data' => [],
         ],
+        [
+            'name' => 'tipoarquivo_id',
+            'label' => 'Tipo do Documento',
+            'type' => 'select',
+            'model' => 'TipoArquivo',
+            'data' => [],
+        ],
     ];
 
     // uso no crud generico
-    public static function getFields()
+    public static function getFields(?int $setor_id = null)
     {
         $fields = self::fields;
         foreach ($fields as &$field)
             if (substr($field['name'], -3) == '_id') {
                 $class = '\\App\\Models\\' . $field['model'];
-                $field['data'] = $class::allToSelect();
+                $field['data'] = $class::allToSelect($setor_id);
             }
         return $fields;
     }
@@ -48,8 +56,8 @@ class SolicitacaoDocumento extends Model
     public static function estados()
     {
         return [
-            'Aguardando Envio', 'Isenção de Taxa Solicitada',                                          // decorrem de ações do candidato
-            'Isenção de Taxa em Avaliação', 'Isenção de Taxa Aprovada', 'Isenção de Taxa Rejeitada'    // decorrem de ações do serviço de pós-graduação
+            'Pendente',        // decorre de ações do usuário
+            'Providenciado'    // decorre de ações do gerente
         ];
     }
 
@@ -109,6 +117,14 @@ class SolicitacaoDocumento extends Model
     }
 
     /**
+     * relacionamento com arquivos
+     */
+    public function arquivos()
+    {
+        return $this->belongsToMany('App\Models\Arquivo', 'arquivo_solicitacaodocumento', 'solicitacaodocumento_id', 'arquivo_id')->withPivot('tipo')->withTimestamps();
+    }
+
+    /**
      * relacionamento com users
      */
     public function users()
@@ -122,5 +138,13 @@ class SolicitacaoDocumento extends Model
     public function setor()
     {
         return $this->belongsTo(Setor::class);
+    }
+
+    /**
+     * relacionamento com tipo de arquivo
+     */
+    public function tipoarquivo()
+    {
+        return $this->belongsTo(TipoArquivo::class);
     }
 }

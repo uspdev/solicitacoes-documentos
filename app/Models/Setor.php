@@ -54,7 +54,7 @@ class Setor extends Model
     /**
      * utilizado nas views common
      */
-    public static function getFields()
+    public static function getFields(?string $param = null)
     {
         $fields = SELF::fields;
         //return $fields;
@@ -102,6 +102,17 @@ class Setor extends Model
     }
 
     /**
+     * Mostra lista de setores
+     * para selecionar e solicitar documento
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public static function listarSetoresParaSolicitacaoDocumento()
+    {
+        return self::all();
+    }
+
+    /**
      * Auto relacionamento
      */
     public function setor()
@@ -124,5 +135,21 @@ class Setor extends Model
     {
         return $this->belongsToMany('App\Models\User', 'user_setor')
             ->withPivot('funcao')->withTimestamps();
+    }
+
+    /**
+     * Setor possui solicitações de documentos
+     */
+    public function solicitacoesdocumentos()
+    {
+        return $this->hasMany('App\Models\SolicitacaoDocumento');
+    }
+
+    /**
+     * Setor possui tipos de arquivo
+     */
+    public function tiposarquivo()
+    {
+        return $this->hasMany('App\Models\TipoArquivo');
     }
 }

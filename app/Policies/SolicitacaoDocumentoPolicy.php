@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Setor;
-use App\Models\SolicitacaoDocumentos;
+use App\Models\SolicitacaoDocumento;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\Gate;
@@ -60,10 +60,6 @@ class SolicitacaoDocumentoPolicy
      */
     public function create(User $user, ?Setor $setor = null)
     {
-        if (!is_null($setor))
-            if ($setor->estado !== 'Período de Solicitações de Documentos')
-                return false;
-
         return Gate::allows('perfilusuario');
     }
 
@@ -76,10 +72,6 @@ class SolicitacaoDocumentoPolicy
      */
     public function update(User $user, SolicitacaoDocumento $solicitacaodocumento)
     {
-        $setor = $solicitacaodocumento->setor;
-        if ($setor->estado !== 'Período de Solicitações de Documentos')
-            return false;
-
         return (Gate::allows('perfilusuario') && ($solicitacaodocumento->pessoas('Autor')->id == $user->id));    // permite que apenas o usuário autor da solicitação de documento a edite
     }
 

@@ -18,9 +18,6 @@ class TipoArquivo extends Model
     protected $fillable = [
         'setor_id',
         'nome',
-        'obrigatorio',
-        'minimo',
-        'aluno_especial',
     ];
 
     // uso no crud generico
@@ -39,13 +36,13 @@ class TipoArquivo extends Model
     ];
 
     // uso no crud generico
-    public static function getFields()
+    public static function getFields(?int $setor_id = null)
     {
         $fields = self::fields;
         foreach ($fields as &$field) {
             if (substr($field['name'], -3) == '_id') {
                 $class = '\\App\\Models\\' . $field['model'];
-                $field['data'] = $class::allToSelect();
+                $field['data'] = $class::allToSelect($setor_id);
             }
         }
         return $fields;
@@ -55,20 +52,13 @@ class TipoArquivo extends Model
      * retorna todos os tipos de arquivo
      * utilizado nas views common, para o select
      */
-    public static function allToSelect()
+    public static function allToSelect(?int $setor_id = null)
     {
-        $tiposarquivo = self::get();
+        $tiposarquivo = $setor_id ? self::where('setor_id', $setor_id)->get() : self::get();
         $ret = [];
         foreach ($tiposarquivo as $tipoarquivo)
-            if (Gate::allows('tiposarquivo.view', $linhapesquisa))
-                $ret[$tipoarquivo->id] = $tipoarquivo->nome;
+            $ret[$tipoarquivo->id] = $tipoarquivo->nome;
         return $ret;
-    }
-
-    public static function obterTiposArquivoPossiveis(string $setor_nome)
-    {
-        // todos os tipos de arquivo possíveis para o dado setor
-        return self::where('setor_id', $setor_nome)->get();
     }
 
     /**
@@ -80,10 +70,18 @@ class TipoArquivo extends Model
     }
 
     /**
-     * Relacionamento: tipo de documento pertence a setor
+     * Relacionamento: tipo de arquivo pertence a setor
      */
     public function setor()
     {
         return $this->belongsTo('App\Models\Setor');
+    }
+
+    /**
+     * relacionamento com arquivos
+     */
+    public function arquivos()
+    {
+        return $this->hasMany('App\Models\Arquivo', 'tipoarquivo_id');
     }
 }

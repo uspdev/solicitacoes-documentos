@@ -16,6 +16,7 @@ class CreateSolicitacoesDocumentosTable extends Migration
         Schema::create('solicitacoesdocumentos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('estado', 90);
+            $table->foreignId('setor_id')->constrained('setores');
             $table->foreignId('tipoarquivo_id')->constrained('tiposarquivo');
             $table->timestamps();
         });

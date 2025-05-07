@@ -23,6 +23,7 @@
       <thead>
         <tr>
           <th>Solicitante</th>
+          <th>Tipo do Documento</th>
           <th>Setor</th>
           <th class="text-right">Efetuada em</th>
           <th class="text-right">Atualização</th>
@@ -33,11 +34,16 @@
           <tr>
             <td>
               @include('solicitacoesdocumentos.partials.status-small')
-              <a href="solicitacoesdocumentos/edit/{{ $solicitacaodocumento->id }}">Aaa</a>
+              <a href="solicitacoesdocumentos/edit/{{ $solicitacaodocumento->id }}">
+                {{ $solicitacaodocumento->pessoas('Autor')->name }}
+              </a>
               @include('solicitacoesdocumentos.partials.status-muted')
             </td>
             <td>
-              {{ $solicitacaodocumento->setor->nome }} ({{ $solicitacaodocumento->setor->nome }})
+              {{ $solicitacaodocumento->tipoarquivo->nome }}
+            </td>
+            <td>
+              {{ $solicitacaodocumento->setor->sigla }} ({{ $solicitacaodocumento->setor->nome }})
             </td>
             <td class="text-right">
               <span class="d-none">{{ $solicitacaodocumento->created_at }}</span>

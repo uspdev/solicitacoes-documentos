@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ArquivoController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\LimpezaDadosController;
 use App\Http\Controllers\SetorController;
 use App\Http\Controllers\SolicitacaoDocumentoController;
 use App\Http\Controllers\TipoArquivoController;
@@ -21,8 +23,10 @@ Route::get('solicitacoesdocumentos', [SolicitacaoDocumentoController::class, 'in
 Route::get('solicitacoesdocumentos/create', [SolicitacaoDocumentoController::class, 'listaSetoresParaSolicitacaoDocumento'])->name('solicitacoesdocumentos.create');
 Route::get('solicitacoesdocumentos/create/{setor}', [SolicitacaoDocumentoController::class, 'create'])->name('solicitacoesdocumentos.create.setor');
 Route::post('solicitacoesdocumentos/create', [SolicitacaoDocumentoController::class, 'store'])->name('solicitacoesdocumentos.store');
-Route::get('solicitacoesdocumentos/edit/{solicitacaodocumentos}', [SolicitacaoDocumentoController::class, 'edit'])->name('solicitacoesdocumentos.edit');
-Route::put('solicitacoesdocumentos/edit/{solicitacaodocumentos}', [SolicitacaoDocumentoController::class, 'update'])->name('solicitacoesdocumentos.update');
+Route::get('solicitacoesdocumentos/edit/{solicitacaodocumento}', [SolicitacaoDocumentoController::class, 'edit'])->name('solicitacoesdocumentos.edit');
+
+// ARQUIVOS
+Route::resource('arquivos', ArquivoController::class);
 
 // SETORES
 Route::post('setores/{setor}/pessoas', [SetorController::class, 'storePessoa']);
@@ -38,6 +42,10 @@ Route::get('search/codpes', [UserController::class, 'codpes']);
 Route::get('users/perfil/{perfil}', [UserController::class, 'trocarPerfil']);
 Route::get('users/meuperfil', [UserController::class, 'meuperfil']);
 Route::resource('users', UserController::class);
+
+// LIMPEZA DE DADOS
+Route::get('limpezadados', [LimpezaDadosController::class, 'showForm'])->name('limpezadados.showForm');
+Route::post('limpezadados', [LimpezaDadosController::class, 'run'])->name('limpezadados.run');
 
 // ADMIN
 Route::get('admin', [AdminController::class, 'index']);

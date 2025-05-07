@@ -19,6 +19,11 @@ $admin = [
         'url' => 'tiposarquivo',
         'can' => 'tiposarquivo.viewAny',
     ],
+    [
+        'text' => '<i class="fa fa-trash-alt"></i> Limpeza de Dados',
+        'url' => 'limpezadados',
+        'can' => 'limpezadados.showForm',
+    ],
 ];
 
 $menu = [

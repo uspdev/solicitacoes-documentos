@@ -93,7 +93,7 @@ class User extends Authenticatable
         ],
     ];
 
-    public static function getFields()
+    public static function getFields(?string $param = null)
     {
         $fields = self::fields;
         return $fields;
