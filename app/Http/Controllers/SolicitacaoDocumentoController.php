@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SolicitacaoDocumentoRequest;
-use App\Mail\SolicitacaoDocumentoMail;
 use App\Models\Setor;
 use App\Models\SolicitacaoDocumento;
 use App\Models\TipoArquivo;
@@ -124,10 +123,8 @@ class SolicitacaoDocumentoController extends Controller
             return $solicitacaodocumento;
         });
 
-        // envia e-mail avisando o setor sobre a nova solicitação de documento
-        $passo = 'nova solicitação';
-        \Mail::to($setor->email)
-            ->queue(new SolicitacaoDocumentoMail(compact('passo', 'solicitacaodocumento', 'user')));
+        // agora sim vamos disparar o evento (necessário porque acima salvamos com saveQuietly)
+        event('eloquent.created: App\Models\SolicitacaoDocumento', $solicitacaodocumento);
 
         \UspTheme::activeUrl('solicitacoesdocumentos');
         return view('solicitacoesdocumentos.index', $this->monta_compact_index());

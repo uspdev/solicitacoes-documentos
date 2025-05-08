@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\SolicitacaoDocumentoMail;
 use App\Models\Arquivo;
 use App\Models\SolicitacaoDocumento;
 use App\Models\TipoArquivo;
@@ -82,12 +81,6 @@ class ArquivoController extends Controller
 
             return $solicitacaodocumento;
         });
-
-        // envia e-mail avisando o usuário sobre o atendimento da solicitação de documento
-        $passo = 'solicitação atendida';
-        $user = $solicitacaodocumento->pessoas('Autor');
-        \Mail::to($user->email)
-            ->queue(new SolicitacaoDocumentoMail(compact('passo', 'solicitacaodocumento', 'user')));
 
         $request->session()->flash('alert-success', 'Documento(s) adicionado(s) com sucesso');
         \UspTheme::activeUrl('solicitacoesdocumentos');

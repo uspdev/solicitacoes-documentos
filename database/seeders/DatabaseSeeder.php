@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         // desativando eventos no seeder
         SolicitacaoDocumento::flushEventListeners();
+        Arquivo::flushEventListeners();
 
         $this->call([
             PermissionSeeder::class,        // adiciona permissions
