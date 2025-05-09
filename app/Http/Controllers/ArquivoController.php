@@ -84,7 +84,7 @@ class ArquivoController extends Controller
 
         $request->session()->flash('alert-success', 'Documento(s) adicionado(s) com sucesso');
         \UspTheme::activeUrl('solicitacoesdocumentos');
-        return view('solicitacoesdocumentos.edit', $this->monta_compact($solicitacaodocumento, 'edit', 'arquivos'));
+        return redirect()->route('solicitacoesdocumentos.edit', $solicitacaodocumento)->with($this->monta_compact($solicitacaodocumento, 'edit', 'arquivos'));    // se fosse return view, um eventual F5 do usuário duplicaria o registro... POSTs devem ser com redirect
     }
 
     /**
