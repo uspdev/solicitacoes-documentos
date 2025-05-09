@@ -16,7 +16,9 @@ class SolicitacaoDocumentoMail extends Mailable
     protected $solicitacaodocumento;
     protected $user;
 
-    // campos adicionais para nova solicitação de documento
+    // campos adicionais para nova solicitação de documento - solicitante
+
+    // campos adicionais para nova solicitação de documento - setor
 
     // campos adicionais para solicitação de documento atendida
 
@@ -32,7 +34,10 @@ class SolicitacaoDocumentoMail extends Mailable
         $this->user = $data['user'];
 
         switch ($this->passo) {
-            case 'nova solicitação':
+            case 'nova solicitação - solicitante':
+                break;
+
+            case 'nova solicitação - setor':
                 break;
 
             case 'solicitação atendida':
@@ -47,11 +52,21 @@ class SolicitacaoDocumentoMail extends Mailable
     public function build()
     {
         switch ($this->passo) {
-            case 'nova solicitação':
+            case 'nova solicitação - solicitante':
                 return $this
                     ->subject('[' . config('app.name') . '] Documento Solicitado')
                     ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->view('emails.solicitacaodocumento_nova')
+                    ->view('emails.solicitacaodocumento_nova_solicitante')
+                    ->with([
+                        'solicitacaodocumento' => $this->solicitacaodocumento,
+                        'user' => $this->user,
+                    ]);
+
+            case 'nova solicitação - setor':
+                return $this
+                    ->subject('[' . config('app.name') . '] Documento Solicitado')
+                    ->from(config('mail.from.address'), config('mail.from.name'))
+                    ->view('emails.solicitacaodocumento_nova_setor')
                     ->with([
                         'solicitacaodocumento' => $this->solicitacaodocumento,
                         'user' => $this->user,

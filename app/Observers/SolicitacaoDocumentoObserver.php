@@ -19,8 +19,13 @@ class SolicitacaoDocumentoObserver
     {
         $user = $solicitacaodocumento->pessoas('Autor');
 
+        // envia e-mail avisando o solicitante sobre sua solicitação de documento
+        $passo = 'nova solicitação - solicitante';
+        \Mail::to($user->email)
+            ->queue(new SolicitacaoDocumentoMail(compact('passo', 'solicitacaodocumento', 'user')));
+
         // envia e-mail avisando o setor sobre a nova solicitação de documento
-        $passo = 'nova solicitação';
+        $passo = 'nova solicitação - setor';
         \Mail::to($solicitacaodocumento->setor->email)
             ->queue(new SolicitacaoDocumentoMail(compact('passo', 'solicitacaodocumento', 'user')));
     }

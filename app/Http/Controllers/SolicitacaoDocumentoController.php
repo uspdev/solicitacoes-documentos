@@ -126,6 +126,7 @@ class SolicitacaoDocumentoController extends Controller
         // agora sim vamos disparar o evento (necessário porque acima salvamos com saveQuietly)
         event('eloquent.created: App\Models\SolicitacaoDocumento', $solicitacaodocumento);
 
+        $request->session()->flash('alert-success', 'Documento solicitado com sucesso');
         \UspTheme::activeUrl('solicitacoesdocumentos');
         return view('solicitacoesdocumentos.index', $this->monta_compact_index());
     }
