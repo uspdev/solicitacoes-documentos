@@ -35,14 +35,13 @@ class ArquivoPolicy
         if (Gate::allows('perfiladmin'))
             return true;                                           // permite que admins baixem todos os arquivos
         elseif (Gate::allows('perfilgerente'))
-            return true;
-        elseif (Gate::allows('perfilusuario')) {
+            return ($solicitacaodocumento->setor_id == \Auth::user()->obterSetorMaisRecente()->id);    // permite que o gerente visualize as solicitações de documentos do seu setor
+        elseif (Gate::allows('perfilusuario'))
             foreach ($arquivo->solicitacoesdocumentos as $solicitacaodocumento) {
                 $autor_solicitacaodocumento = $solicitacaodocumento->pessoas('Autor');
                 if ($autor_solicitacaodocumento && ($autor_solicitacaodocumento->id == $user->id))
                     return true;                                   // permite que usuários baixem arquivos de suas solicitações de documentos
             }
-        }
     }
 
     /**
@@ -57,10 +56,9 @@ class ArquivoPolicy
         if (Gate::allows('perfiladmin'))
             return true;
         elseif (Gate::allows('perfilgerente'))
-            return true;
-        elseif (Gate::allows('perfilusuario')) {
+            return ($solicitacaodocumento->setor_id == \Auth::user()->obterSetorMaisRecente()->id);    // permite que o gerente visualize as solicitações de documentos do seu setor
+        elseif (Gate::allows('perfilusuario'))
             return false;
-        }
     }
 
     /**
@@ -116,7 +114,7 @@ class ArquivoPolicy
         if (Gate::allows('perfiladmin'))
             return true;
         elseif (Gate::allows('perfilgerente'))
-            return true;
+            return ($solicitacaodocumento->setor_id == \Auth::user()->obterSetorMaisRecente()->id);    // permite que o gerente visualize as solicitações de documentos do seu setor
         elseif (Gate::allows('perfilusuario'))
             return false;
     }

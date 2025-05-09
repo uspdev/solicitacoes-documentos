@@ -46,9 +46,9 @@ class SolicitacaoDocumentoPolicy
         if (Gate::allows('perfiladmin'))
             return true;
         elseif (Gate::allows('perfilgerente'))
-            return ;
+            return ($solicitacaodocumento->setor_id == \Auth::user()->obterSetorMaisRecente()->id);    // permite que o gerente visualize as solicitações de documentos do seu setor
         else
-            return ($solicitacaodocumento->pessoas('Autor')->id == $user->id);    // permite que o usuário autor da solicitação de documento a visualize
+            return ($solicitacaodocumento->pessoas('Autor')->id == $user->id);           // permite que o usuário autor da solicitação de documento a visualize
     }
 
     /**
@@ -72,7 +72,7 @@ class SolicitacaoDocumentoPolicy
      */
     public function update(User $user, SolicitacaoDocumento $solicitacaodocumento)
     {
-        return (Gate::allows('perfilusuario') && ($solicitacaodocumento->pessoas('Autor')->id == $user->id));    // permite que apenas o usuário autor da solicitação de documento a edite
+        return false;
     }
 
     /**
@@ -87,7 +87,7 @@ class SolicitacaoDocumentoPolicy
         if (Gate::allows('perfiladmin'))
             return true;
         elseif (Gate::allows('perfilgerente'))
-            return ;
+            return ($solicitacaodocumento->setor_id == \Auth::user()->obterSetorMaisRecente()->id);    // permite que o gerente visualize as solicitações de documentos do seu setor
         else
             return false;
     }
@@ -104,7 +104,7 @@ class SolicitacaoDocumentoPolicy
         if (Gate::allows('perfiladmin'))
             return true;
         elseif (Gate::allows('perfilgerente'))
-            return ;
+            return ($solicitacaodocumento->setor_id == \Auth::user()->obterSetorMaisRecente()->id);    // permite que o gerente visualize as solicitações de documentos do seu setor
         elseif (Gate::allows('perfilusuario'))
             return false;
     }

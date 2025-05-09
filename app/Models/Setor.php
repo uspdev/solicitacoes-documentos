@@ -77,7 +77,7 @@ class Setor extends Model
         $ret = [];
         foreach ($setores as $setor) {
             if (Gate::allows('setores.view', $setor)) {
-            $ret[$setor->id] = $setor->sigla . ' - ' . $setor->nome;
+                $ret[$setor->id] = $setor->sigla . ' - ' . $setor->nome;
             }
         }
         return $ret;

@@ -99,7 +99,7 @@ class SolicitacaoDocumento extends Model
                 return self::all();
 
             case 'gerente':
-                return ;
+                return self::where('setor_id', \Auth::user()->obterSetorMaisRecente()->id)->get();
 
             default:
                 return Auth::user()->solicitacoesdocumentos()->wherePivotIn('papel', ['Autor'])->get();

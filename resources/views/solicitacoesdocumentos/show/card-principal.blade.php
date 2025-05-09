@@ -39,6 +39,9 @@
   <script type="text/javascript">
     $(document).ready(function() {
       $('#form_principal').find(':input:visible:first').focus();
+      @if (($modo == 'edit') || (session('perfil') != 'usuario'))
+        $('#tipoarquivo_id').prop('disabled', true);
+      @endif
     });
   </script>
 @endsection

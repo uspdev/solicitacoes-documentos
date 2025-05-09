@@ -66,7 +66,13 @@ class TipoArquivo extends Model
      */
     public static function listarTiposArquivo()
     {
-        return self::with('setor')->get()->sortBy('setor.sigla');
+        switch (session('perfil')) {
+            case 'admin':
+                return self::with('setor')->get()->sortBy('setor.sigla');
+
+            case 'gerente':
+                return self::with('setor')->where('setor_id', \Auth::user()->obterSetorMaisRecente()->id)->get()->sortBy('setor.sigla');
+        }
     }
 
     /**

@@ -214,6 +214,11 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Setor', 'user_setor')->withPivot('funcao')->withTimestamps();
     }
 
+    public function obterSetorMaisRecente()
+    {
+        return $this->setores()->latest('user_setor.created_at')->first();
+    }
+
     // este método é invocado pelo senhaunica-socialite, por isso é preciso que ele exista aqui
     // ele só é invocado quando alguém assume a identidade de um usuário que nunca antes logou no sistema (e que, portanto, nem está gravado na tabela)
     static function findOrCreateFromReplicado($codpes) {

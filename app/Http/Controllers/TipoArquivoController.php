@@ -117,7 +117,7 @@ class TipoArquivoController extends Controller
 
     private function monta_compact_index()
     {
-        $tiposarquivo = TipoArquivo::all()->sortBy('setor.sigla');
+        $tiposarquivo = TipoArquivo::listarTiposArquivo();
         $fields = TipoArquivo::getFields();
         $modal['url'] = 'tiposarquivo';
         $modal['title'] = 'Editar Tipo de Documento';
