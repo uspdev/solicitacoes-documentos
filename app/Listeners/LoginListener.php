@@ -39,6 +39,10 @@ class LoginListener
 
             if ($user->is_admin)
                 session(['perfil' => 'admin']);
+            elseif ($user->setores()->wherePivot('funcao', 'Gerente')->count())
+                session(['perfil' => 'gerente']);
+            else
+                session(['perfil' => 'usuario']);
 
             config('app.debug') && Log::info($log);
         }
