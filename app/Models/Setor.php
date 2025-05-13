@@ -18,6 +18,7 @@ class Setor extends Model
         'sigla',
         'nome',
         'setor_id',
+        'email',
         'cod_set_replicado',
         'cod_set_pai_replicado',
     ];
@@ -26,6 +27,7 @@ class Setor extends Model
         'sigla' => ['required', 'max:15'],
         'nome' => ['required', 'max:255'],
         'setor_id' => 'integer',
+        'email' => ['required', 'email'],
         'cod_set_replicado' => 'nullable',
         'cod_set_pai_replicado' => 'nullable',
     ];
@@ -48,6 +50,10 @@ class Setor extends Model
             'type' => 'select',
             'model' => 'Setor',
             'data' => [],
+        ],
+        [
+            'name' => 'email',
+            'label' => 'E-mail',
         ],
     ];
 
