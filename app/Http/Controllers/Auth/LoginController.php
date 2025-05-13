@@ -87,16 +87,18 @@ class LoginController extends Controller
         $user->save();
 
         // vincula a pessoa ao setor
-        session(['perfil' => '']);    // limpa para não errar dentro do listarProgramasGerenciados
         foreach ($userSenhaUnica->vinculo as $vinculo)
             if ($setor = Setor::where('cod_set_replicado', $vinculo['codigoSetor'])->first())
                 Setor::vincularPessoa($setor, $user, $vinculo['nomeVinculo']);
 
-        if ($user->is_admin) {
-            Auth::login($user, true);
+        Auth::login($user, true);
+        if (Gate::allows('admin'))
             session(['perfil' => 'admin']);
-            return redirect('/');
-        }
+        elseif (Gate::allows('gerente'))
+            session(['perfil' => 'gerente']);
+        else
+            session(['perfil' => 'usuario']);
+        return redirect()->intended('/');
     }
 
     public function logout(Request $request)

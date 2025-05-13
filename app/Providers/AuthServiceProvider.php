@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('gerente', function ($user) {
-            return $user->is_admin;
+            return $user->setores()->wherePivot('funcao', 'Gerente')->count() || $user->is_admin;
         });
 
         Gate::define('usuario', function ($user) {
