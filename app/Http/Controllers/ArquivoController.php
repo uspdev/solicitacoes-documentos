@@ -36,7 +36,8 @@ class ArquivoController extends Controller
     {
         $this->authorize('arquivos.view', $arquivo);
 
-        ob_end_clean();    // https://stackoverflow.com/questions/39329299/laravel-file-downloaded-from-storage-folder-gets-corrupted
+        while (ob_get_level() > 0)    // este while é para não estourar erro quando usando docker
+            ob_end_clean();           // https://stackoverflow.com/questions/39329299/laravel-file-downloaded-from-storage-folder-gets-corrupted
 
         return Storage::download($arquivo->caminho, $arquivo->nome_original);
     }
