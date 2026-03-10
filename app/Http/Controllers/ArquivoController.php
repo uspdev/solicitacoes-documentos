@@ -10,6 +10,7 @@ use App\Utils\JSONForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -34,7 +35,7 @@ class ArquivoController extends Controller
      */
     public function show(Arquivo $arquivo)
     {
-        $this->authorize('arquivos.view', $arquivo);
+        Gate::authorize('arquivos.view', $arquivo);
 
         while (ob_get_level() > 0)    // este while é para não estourar erro quando usando docker
             ob_end_clean();           // https://stackoverflow.com/questions/39329299/laravel-file-downloaded-from-storage-folder-gets-corrupted
@@ -60,7 +61,7 @@ class ArquivoController extends Controller
             \UspTheme::activeUrl('solicitacoesdocumentos');
             return view('solicitacoesdocumentos.edit', array_merge($this->monta_compact($solicitacaodocumento, 'edit'), ['errors' => $validator->errors()]));
         }
-        $this->authorize('arquivos.create', $solicitacaodocumento);
+        Gate::authorize('arquivos.create', $solicitacaodocumento);
 
         // transaction para não ter problema de inconsistência do DB
         $solicitacaodocumento = DB::transaction(function () use ($request, $solicitacaodocumento) {
@@ -103,7 +104,7 @@ class ArquivoController extends Controller
             ['nome_arquivo' => 'required'],
             ['nome_arquivo.required' => 'O nome do arquivo é obrigatório!']
         );
-        $this->authorize('arquivos.update', [$arquivo, $solicitacaodocumento]);
+        Gate::authorize('arquivos.update', [$arquivo, $solicitacaodocumento]);
 
         $nome_antigo = $arquivo->nome_original;
         $extensao = pathinfo($nome_antigo, PATHINFO_EXTENSION);
@@ -126,7 +127,7 @@ class ArquivoController extends Controller
     {
         $solicitacaodocumento = SolicitacaoDocumento::find($request->solicitacaodocumento_id);
 
-        $this->authorize('arquivos.delete', [$arquivo, $solicitacaodocumento]);
+        Gate::authorize('arquivos.delete', [$arquivo, $solicitacaodocumento]);
 
         if (Storage::exists($arquivo->caminho))
             Storage::delete($arquivo->caminho);

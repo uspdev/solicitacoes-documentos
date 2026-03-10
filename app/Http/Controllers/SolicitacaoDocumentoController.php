@@ -11,6 +11,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
@@ -48,7 +49,7 @@ class SolicitacaoDocumentoController extends Controller
     public function index(Request $request)
     {
         $perfil_admin_ou_gerente =  in_array(session('perfil'), ['admin', 'gerente']);
-        $this->authorize('solicitacoesdocumentos.view' . ($perfil_admin_ou_gerente ? 'Any' : 'Their'));
+        Gate::authorize('solicitacoesdocumentos.view' . ($perfil_admin_ou_gerente ? 'Any' : 'Their'));
 
         \UspTheme::activeUrl('solicitacoesdocumentos');
         return view('solicitacoesdocumentos.index', $this->monta_compact_index());
@@ -63,7 +64,7 @@ class SolicitacaoDocumentoController extends Controller
      */
     public function listaSetoresParaSolicitacaoDocumento(Request $request)
     {
-        $this->authorize('solicitacoesdocumentos.create');
+        Gate::authorize('solicitacoesdocumentos.create');
 
         $request->validate(['filtro' => 'nullable|string']);
 
@@ -80,7 +81,7 @@ class SolicitacaoDocumentoController extends Controller
      */
     public function create(Setor $setor)
     {
-        $this->authorize('solicitacoesdocumentos.create', $setor);
+        Gate::authorize('solicitacoesdocumentos.create', $setor);
 
         $solicitacaodocumento = new SolicitacaoDocumento;
         $solicitacaodocumento->setor = $setor;
@@ -99,7 +100,7 @@ class SolicitacaoDocumentoController extends Controller
     public function store(Request $request)
     {
         $setor = Setor::find($request->setor_id);
-        $this->authorize('solicitacoesdocumentos.create', $setor);
+        Gate::authorize('solicitacoesdocumentos.create', $setor);
 
         $validator = Validator::make($request->all(), SolicitacaoDocumentoRequest::rules, SolicitacaoDocumentoRequest::messages);
         if ($validator->fails()) {
@@ -140,7 +141,7 @@ class SolicitacaoDocumentoController extends Controller
      */
     public function edit(Request $request, SolicitacaoDocumento $solicitacaodocumento)
     {
-        $this->authorize('solicitacoesdocumentos.view', $solicitacaodocumento);    // este 1o passo da edição é somente um show, não chega a haver um update
+        Gate::authorize('solicitacoesdocumentos.view', $solicitacaodocumento);    // este 1o passo da edição é somente um show, não chega a haver um update
 
         \UspTheme::activeUrl('solicitacoesdocumentos');
         return view('solicitacoesdocumentos.edit', $this->monta_compact($solicitacaodocumento, 'edit'));
