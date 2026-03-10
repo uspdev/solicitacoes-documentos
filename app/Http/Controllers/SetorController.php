@@ -21,9 +21,9 @@ class SetorController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('setores.viewAny');
+        Gate::authorize('setores.viewAny');
         \UspTheme::activeUrl('setores');
-        
+
         $user = \Auth::user();
 
         if (Gate::allows('perfiladmin')) {
@@ -58,7 +58,7 @@ class SetorController extends Controller
     public function show(Request $request, $id)
     {
         #usando no ajax, somente para admin
-        $this->authorize('admin');
+        Gate::authorize('admin');
         \UspTheme::activeUrl('setores');
 
         if ($request->ajax()) {
@@ -80,7 +80,7 @@ class SetorController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('admin');
+        Gate::authorize('admin');
         $request->validate(Setor::rules);
 
         $setor = Setor::create($request->all());
@@ -101,7 +101,7 @@ class SetorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->authorize('admin');
+        Gate::authorize('admin');
         $request->validate(Setor::rules);
 
         $setor = Setor::find($id);
@@ -120,7 +120,7 @@ class SetorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $this->authorize('admin');
+        Gate::authorize('admin');
 
         $setor = Setor::find($id);
         $setor->delete();
@@ -134,7 +134,7 @@ class SetorController extends Controller
      */
     public function storePessoa(Request $request, Setor $setor)
     {
-        $this->authorize('setores.view', $setor);
+        Gate::authorize('setores.view', $setor);
 
         $user = User::obterOuCriarPorCodpes($request->codpes);
         Setor::vincularPessoa($setor, $user, 'Gerente');
@@ -150,7 +150,7 @@ class SetorController extends Controller
      */
     public function destroyPessoa(Request $request, Setor $setor, $id)
     {
-        $this->authorize('setores.view', $setor);
+        Gate::authorize('setores.view', $setor);
 
         $currentUser = \Auth::user();
 

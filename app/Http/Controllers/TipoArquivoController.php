@@ -25,7 +25,7 @@ class TipoArquivoController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('tiposarquivo.viewAny');
+        Gate::authorize('tiposarquivo.viewAny');
 
         \UspTheme::activeUrl('tiposarquivo');
         if (!$request->ajax())
@@ -41,7 +41,7 @@ class TipoArquivoController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $this->authorize('tiposarquivo.viewAny');
+        Gate::authorize('tiposarquivo.viewAny');
 
         \UspTheme::activeUrl('tiposarquivo');
         if ($request->ajax())
@@ -56,7 +56,7 @@ class TipoArquivoController extends Controller
      */
     public function store(TipoArquivoRequest $request)
     {
-        $this->authorize('tiposarquivo.create');
+        Gate::authorize('tiposarquivo.create');
 
         $validator = Validator::make($request->all(), TipoArquivoRequest::rules, TipoArquivoRequest::messages);
         if ($validator->fails())
@@ -78,7 +78,7 @@ class TipoArquivoController extends Controller
      */
     public function update(TipoArquivoRequest $request, string $id)
     {
-        $this->authorize('tiposarquivo.update');
+        Gate::authorize('tiposarquivo.update');
 
         $validator = Validator::make($request->all(), TipoArquivoRequest::rules, TipoArquivoRequest::messages);
         if ($validator->fails())
@@ -102,7 +102,7 @@ class TipoArquivoController extends Controller
      */
     public function destroy(TipoArquivoRequest $request, string $id)
     {
-        $this->authorize('tiposarquivo.delete');
+        Gate::authorize('tiposarquivo.delete');
 
         $tipoarquivo = TipoArquivo::find((int) $id);
         if ($tipoarquivo->arquivos()->exists())
