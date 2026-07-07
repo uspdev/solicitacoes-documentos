@@ -26,8 +26,9 @@ class SolicitacaoDocumentoObserver
 
         // envia e-mail avisando o setor sobre a nova solicitação de documento
         $passo = 'nova solicitação - setor';
-        \Mail::to($solicitacaodocumento->setor->email)
-            ->queue(new SolicitacaoDocumentoMail(compact('passo', 'solicitacaodocumento', 'user')));
+        if ($solicitacaodocumento->setor->email)
+            \Mail::to($solicitacaodocumento->setor->email)
+                ->queue(new SolicitacaoDocumentoMail(compact('passo', 'solicitacaodocumento', 'user')));
     }
 
     /**
